@@ -25,7 +25,7 @@ export default function Admin({ onHome }) {
     e.preventDefault()
     if (username === ADMIN_USER && password === ADMIN_PASS) {
       setIsAuthenticated(true)
-      localStorage.setItem("isAuthenticated", "true") // persist
+      localStorage.setItem("isAuthenticated", "true")
       setError("")
     } else {
       setError("Invalid username or password")
@@ -34,7 +34,7 @@ export default function Admin({ onHome }) {
 
   const handleLogout = () => {
     setIsAuthenticated(false)
-    localStorage.removeItem("isAuthenticated") // clear persistence
+    localStorage.removeItem("isAuthenticated")
   }
 
   /** ---------- TOPIC STATE ---------- **/
@@ -73,9 +73,9 @@ export default function Admin({ onHome }) {
   const handleAddQuestion = (topicId) => {
     const newQuestion = {
       id: Date.now().toString(),
-      q: "Untitled Question",
+      question: "Untitled Question",
       options: ["", "", "", ""],
-      correctIndex: 0,
+      correct: 0,
       hint: "",
       explanation: "",
     }
@@ -257,12 +257,12 @@ export default function Admin({ onHome }) {
                   {/* Question text */}
                   <input
                     className="border p-1 w-full mb-2 rounded"
-                    value={q.q}
+                    value={q.question}
                     placeholder="Question text"
                     onChange={(e) =>
                       handleUpdateQuestion(activeTopic.id, q.id, (oldQ) => ({
                         ...oldQ,
-                        q: e.target.value,
+                        question: e.target.value,
                       }))
                     }
                   />
@@ -315,7 +315,7 @@ export default function Admin({ onHome }) {
                     }
                   />
 
-                  {/* Correct Index */}
+                  {/* Correct Answer Index */}
                   <div className="text-xs mt-1 flex items-center">
                     Correct answer index:
                     <input
@@ -323,11 +323,11 @@ export default function Admin({ onHome }) {
                       min="0"
                       max="3"
                       className="border p-1 ml-2 w-16 rounded"
-                      value={q.correctIndex}
+                      value={q.correct}
                       onChange={(e) =>
                         handleUpdateQuestion(activeTopic.id, q.id, (oldQ) => ({
                           ...oldQ,
-                          correctIndex: Number(e.target.value),
+                          correct: Number(e.target.value),
                         }))
                       }
                     />
