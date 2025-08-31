@@ -1,114 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import QuizCard from './QuizCard';
+import React from 'react';
 
-export default function QuizContainer({ topic, onBack }) {
-  const total = topic.questions.length;
-  const [idx, setIdx] = useState(-1); // -1 = before start
-  const [selected, setSelected] = useState(null);
-  const [locked, setLocked] = useState(false);
-  const [showCorrect, setShowCorrect] = useState(false);
-  const [finished, setFinished] = useState(false);
-  const [score, setScore] = useState(0);
-
-  useEffect(() => {
-    // Reset quiz state whenever topic changes
-    setIdx(-1);
-    setSelected(null);
-    setLocked(false);
-    setShowCorrect(false);
-    setFinished(false);
-    setScore(0);
-  }, [topic.id]);
-
-  function handleStart() {
-    setIdx(0);
-  }
-
-  function handleSelect(i) {
-    if (locked) return;
-    setSelected(i);
-    setLocked(true);
-    const correct = i === topic.questions[idx].correct;
-    if (correct) {
-      setShowCorrect(true);
-      setScore(s => s + 1);
-    } else {
-      setShowCorrect(false);
-    }
-  }
-
-  function handleNext() {
-    setSelected(null);
-    setLocked(false);
-    setShowCorrect(false);
-    if (idx + 1 < total) {
-      setIdx(idx + 1);
-    } else {
-      setFinished(true);
-    }
-  }
-
-  if (finished) {
-    return (
-      <div className="p-6 text-center">
-        <h2 className="text-2xl font-bold mb-4">{topic.title} – Completed!</h2>
-        <p className="mb-4 text-lg">
-          Your Score: <strong>{score}</strong> / {total}
-        </p>
-        <button className="btn" onClick={onBack}>
-          ← Back to Topics
-        </button>
-      </div>
-    );
-  }
-
-  if (idx === -1) {
-    return (
-      <div className="p-6 text-center">
-        <h2 className="text-xl font-semibold mb-4">{topic.title}</h2>
-        <p className="mb-4">This quiz has {total} questions.</p>
-        <button className="btn" onClick={handleStart}>
-          Start Quiz
-        </button>
-        <div className="mt-4">
-          <button className="btn secondary" onClick={onBack}>
-            ← Back to Topics
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const curQ = topic.questions[idx];
-
+export default function QuizCard({ question, index, onSelect, selectedIndex, showCorrect, disabled }) {
   return (
-    <div className="p-4">
-      <div className="quiz-header flex justify-between items-center mb-4">
-        <button className="btn small" onClick={onBack}>
-          ← Topics
-        </button>
-        <h2 className="font-bold">{topic.title}</h2>
-        <div className="score-mini">
-          Score: {score}/{total}
-        </div>
+    <div className="bg-white p-4 rounded-lg shadow max-w-3xl mx-auto">
+      <div className="mb-2 text-sm text-slate-500">Question {index + 1}</div>
+      <div className="text-lg font-semibold mb-4">{question.question}</div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {question.options.map((opt, i) => {
+          let classes = 'px-3 py-2 rounded border text-left cursor-pointer select-none';
+
+          if (selectedIndex === i && disabled) {
+            if (showCorrect) {
+              classes += ' border-emerald-500 bg-emerald-50';
+            } else {
+              classes += ' border-red-500 bg-red-50';
+            }
+          } else {
+            classes += ' border-slate-200 hover:bg-slate-50';
+          }
+
+          return (
+            <button
+              key={i}
+              className={classes}
+              onClick={() => onSelect(i)}
+              disabled={disabled}
+            >
+              {opt}
+            </button>
+          );
+        })}
       </div>
-
-      <QuizCard
-        question={curQ}
-        index={idx}
-        onSelect={handleSelect}
-        selectedIndex={selected}
-        showCorrect={showCorrect}
-        disabled={locked}
-      />
-
-      {locked && (
-        <div className="text-center mt-4">
-          <button className="btn" onClick={handleNext}>
-            {idx + 1 < total ? 'Next Question' : 'Finish Quiz'}
-          </button>
-        </div>
-      )}
     </div>
   );
 }
