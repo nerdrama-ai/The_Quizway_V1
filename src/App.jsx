@@ -1,37 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { loadData, saveData, uid } from './utils/storage';
-import Header from './components/Header';
-import Home from './components/Home';
-import QuizTopic from './components/QuizTopic';
-import AdminPanel from './components/AdminPanel';
+import React, { useState } from 'react'
+import { TOPICS } from './data/topics'
+import Home from './pages/Home'
+import TopicPage from './pages/TopicPage'
+import Header from './components/Header'
 
 
 export default function App(){
-const [data, setData] = useState(loadData);
-useEffect(()=> saveData(data), [data]);
+const [route, setRoute] = useState({ name: 'home' })
 
 
-const [screen, setScreen] = useState({ name: 'home' });
+function openTopic(id){
+const topic = TOPICS.find(t => t.id === id)
+setRoute({ name: 'topic', topic })
+}
+
+
+function goHome(){
+setRoute({ name: 'home' })
+}
 
 
 return (
-<div className="app-root">
-<Header onGoAdmin={() => setScreen({name:'admin'})} onGoHome={() => setScreen({name:'home'})} />
-<main className="container">
-{screen.name === 'home' && (
-<Home topics={data.topics} onOpenTopic={(topicId)=> setScreen({name:'quiz', topicId})} onCreateTopic={(title)=>{
-const t={id:uid(), title:title||'Untitled', questions:[]};
-setData(s=> ({...s, topics:[...s.topics, t]}));
-}} />
+<div className="min-h-screen bg-slate-50">
+<Header title="Quiz App" onHome={goHome} />
+
+
+{route.name === 'home' && (
+<Home topics={TOPICS} onOpen={openTopic} />
 )}
-{screen.name === 'quiz' && (
-<QuizTopic data={data} setData={setData} topicId={screen.topicId} onBack={()=> setScreen({name:'home'})} />
+
+
+{route.name === 'topic' && (
+<TopicPage topic={route.topic} onHome={goHome} />
 )}
-{screen.name === 'admin' && (
-<AdminPanel data={data} setData={setData} onBack={()=> setScreen({name:'home'})} />
-)}
-</main>
-<footer className="footer">QuizBox • Simple cue-card quizzes • Data saved to localStorage</footer>
+
+
+<footer className="text-center p-4 text-xs text-slate-500">Built with ❤️</footer>
 </div>
-);
+)
 }
