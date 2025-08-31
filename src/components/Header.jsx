@@ -11,19 +11,23 @@ export default function Header({ title, onHome, onAdmin }) {
 
       {/* Nav Buttons */}
       <div className="flex gap-3">
-        <button
-          onClick={onHome}
-          className="px-3 py-1.5 rounded-md bg-indigo-600/80 hover:bg-indigo-600 text-white text-sm transition-all shadow-md hover:shadow-indigo-500/30"
-        >
-          Home
-        </button>
-        <button
-          onClick={onAdmin}
-          className="px-3 py-1.5 rounded-md bg-cyan-600/80 hover:bg-cyan-600 text-white text-sm transition-all shadow-md hover:shadow-cyan-500/30"
-        >
-          Admin
-        </button>
-      </div>
+  <button
+    onClick={onHome}
+    className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium shadow-md transition 
+               hover:bg-indigo-700 hover:shadow-lg 
+               focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-600"
+  >
+    Home
+  </button>
+  <button
+    onClick={onAdmin}
+    className="px-4 py-2 rounded-lg bg-cyan-600 text-white text-sm font-medium shadow-md transition 
+               hover:bg-cyan-700 hover:shadow-lg 
+               focus:outline-none focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-600"
+  >
+    Admin
+  </button>
+</div>
     </header>
   )
 }
