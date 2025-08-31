@@ -5,74 +5,56 @@ export default function Quiz({ topic, onBack }) {
   const total = topic.questions.length;
 
   // === STATE MANAGEMENT ===
-  const [idx, setIdx] = useState(-1); // Current question index (-1 means quiz not started)
-  const [selected, setSelected] = useState(null); // User's selected option
-  const [locked, setLocked] = useState(false); // Prevent selecting multiple answers
-  const [showCorrect, setShowCorrect] = useState(false); // Highlight correct answer
-  const [finished, setFinished] = useState(false); // Marks quiz completion
-  const [score, setScore] = useState(0); // Tracks correct answers
+  const [idx, setIdx] = useState(-1);
+  const [selected, setSelected] = useState(null);
+  const [locked, setLocked] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const [score, setScore] = useState(0);
 
-  // Reset state when a new topic is chosen
   useEffect(() => {
     setIdx(-1);
     setSelected(null);
     setLocked(false);
-    setShowCorrect(false);
     setFinished(false);
     setScore(0);
   }, [topic.id]);
 
-  // Start quiz
   function handleStart() {
     setIdx(0);
   }
 
-  // Handle option selection
   function handleSelect(i) {
-    if (locked) return; // Ignore clicks after locking
-
+    if (locked) return;
     setSelected(i);
     setLocked(true);
-
-    const correct = i === topic.questions[idx].correct;
-
-    if (correct) {
-      setShowCorrect(true);
-      setScore((s) => s + 1); // Increase score
-    } else {
-      setShowCorrect(false);
+    if (i === topic.questions[idx].correct) {
+      setScore((s) => s + 1);
     }
   }
 
-  // Move to next question or finish
   function handleNext() {
     setSelected(null);
     setLocked(false);
-    setShowCorrect(false);
-
     if (idx + 1 < total) {
-      setIdx(idx + 1); // Go to next
+      setIdx(idx + 1);
     } else {
-      setFinished(true); // End quiz
+      setFinished(true);
     }
   }
 
-  // === QUIZ COMPLETED SCREEN ===
+  // === COMPLETED SCREEN ===
   if (finished) {
     return (
-      <div className="p-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl text-white">
-        <h2 className="text-3xl font-extrabold mb-4 tracking-wide">
+      <div className="p-10 text-center bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl max-w-2xl mx-auto">
+        <h2 className="text-4xl font-extrabold mb-6 bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">
           {topic.title} ✅ Completed!
         </h2>
-        <p className="mb-6 text-xl">
+        <p className="mb-8 text-2xl text-slate-200">
           Your Score:{" "}
-          <span className="text-emerald-400 font-bold">
-            {score}
-          </span>{" "}
-          / {total}
+          <span className="text-emerald-400 font-bold">{score}</span> / {total}
         </p>
         <button
-          className="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-medium shadow-lg hover:shadow-cyan-500/50 transition-all"
+          className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-semibold shadow-lg hover:shadow-cyan-400/50 hover:scale-105 transition"
           onClick={onBack}
         >
           ← Back to Topics
@@ -81,21 +63,23 @@ export default function Quiz({ topic, onBack }) {
     );
   }
 
-  // === QUIZ INTRO SCREEN (before starting) ===
+  // === INTRO SCREEN ===
   if (idx === -1) {
     return (
-      <div className="p-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl text-white">
-        <h2 className="text-2xl font-bold mb-4">{topic.title}</h2>
-        <p className="mb-6">This quiz has {total} questions.</p>
+      <div className="p-10 text-center bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl max-w-2xl mx-auto">
+        <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">
+          {topic.title}
+        </h2>
+        <p className="mb-6 text-slate-300">This quiz has {total} questions.</p>
         <button
-          className="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-medium shadow-lg hover:shadow-cyan-500/50 transition-all"
+          className="px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-md hover:scale-105 transition"
           onClick={handleStart}
         >
           🚀 Start Quiz
         </button>
-        <div className="mt-4">
+        <div className="mt-5">
           <button
-            className="px-4 py-2 rounded-lg bg-slate-700/80 text-slate-200 hover:bg-slate-600 transition-all"
+            className="px-5 py-2 rounded-lg bg-slate-700/70 text-slate-200 hover:bg-slate-600 transition"
             onClick={onBack}
           >
             ← Back to Topics
@@ -109,57 +93,53 @@ export default function Quiz({ topic, onBack }) {
   const curQ = topic.questions[idx];
 
   return (
-    <div className="p-4">
-      {/* Header with back + title + score */}
-      <div className="quiz-header flex justify-between items-center mb-6 text-white">
+    <div className="p-6">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
         <button
-          className="px-3 py-1.5 rounded-lg bg-slate-800/70 hover:bg-slate-700 text-sm transition-all shadow"
+          className="px-4 py-2 rounded-lg bg-gradient-to-r from-slate-700 to-slate-600 text-white hover:opacity-80 shadow"
           onClick={onBack}
         >
           ← Topics
         </button>
-        <h2 className="text-lg font-semibold tracking-wide">{topic.title}</h2>
-        <div className="px-3 py-1.5 rounded-lg bg-slate-800/70 text-sm">
+        <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">
+          {topic.title}
+        </h2>
+        <div className="px-4 py-2 rounded-lg bg-white/10 text-sm text-slate-200 shadow">
           Score:{" "}
-          <span className="text-emerald-400 font-bold">
-            {score}
-          </span>{" "}
-          / {total}
+          <span className="text-emerald-400 font-bold">{score}</span> / {total}
         </div>
       </div>
 
       {/* Question Card */}
-      <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl border border-white/10 max-w-3xl mx-auto text-white">
-        {/* Question number */}
-        <div className="mb-2 text-sm text-slate-300">
-          Question {idx + 1}
+      <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-8 max-w-3xl mx-auto">
+        <div className="mb-3 text-sm text-slate-400">
+          Question {idx + 1} of {total}
         </div>
-
-        {/* Question text */}
-        <div className="text-xl font-semibold mb-6">
+        <div className="text-2xl font-semibold mb-8 text-slate-100">
           {curQ.question}
         </div>
 
         {/* Options */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {curQ.options.map((opt, i) => {
-            let classes =
-              "px-4 py-3 rounded-xl border text-left cursor-pointer select-none transition shadow-sm ";
+            let base =
+              "px-5 py-4 rounded-xl border text-left font-medium cursor-pointer select-none transition transform hover:scale-[1.02] ";
+            let classes = base;
 
-            // Highlight selected & correct/incorrect answers
             if (locked) {
               if (i === curQ.correct) {
                 classes +=
-                  "border-emerald-400 bg-emerald-500/20 text-emerald-200";
-              } else if (selected === i && selected !== curQ.correct) {
+                  "border-emerald-400 bg-emerald-500/20 text-emerald-200 shadow-lg shadow-emerald-500/20";
+              } else if (selected === i) {
                 classes +=
-                  "border-red-400 bg-red-500/20 text-red-200";
+                  "border-red-400 bg-red-500/20 text-red-200 shadow-lg shadow-red-500/20";
               } else {
-                classes += "border-slate-500/40 text-slate-300";
+                classes += "border-slate-500/40 text-slate-400";
               }
             } else {
               classes +=
-                "border-slate-500/40 hover:bg-white/10 hover:border-cyan-400";
+                "border-slate-500/40 text-slate-200 hover:border-cyan-400 hover:bg-white/10";
             }
 
             return (
@@ -176,11 +156,11 @@ export default function Quiz({ topic, onBack }) {
         </div>
       </div>
 
-      {/* Next button (only visible after selection) */}
+      {/* Next Button */}
       {locked && (
-        <div className="text-center mt-6">
+        <div className="text-center mt-8">
           <button
-            className="px-6 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-medium shadow-lg hover:shadow-indigo-500/50 transition-all"
+            className="px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-semibold shadow-lg hover:shadow-indigo-400/50 hover:scale-105 transition"
             onClick={handleNext}
           >
             {idx + 1 < total ? "Next Question →" : "Finish Quiz ✅"}
