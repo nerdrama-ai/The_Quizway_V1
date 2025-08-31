@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Scorecard from '../components/Scorecard'
-import QuestionBox from '../components/QuestionBox'
+import QuizContainer from '../components/QuizContainer'
 
 
 export default function TopicPage({ topic, onHome }){
@@ -55,7 +55,7 @@ return (
 
 
 {showBox && !completed && (
-<QuestionBox
+<QuizContainer
 questions={topic.questions}
 onComplete={handleComplete}
 onProgressUpdate={(qIdx) => setProgress(qIdx)}
