@@ -1,10 +1,8 @@
 // FILE: src/components/Quiz.jsx
 import React, { useState, useEffect } from "react";
 
-export default function Quiz({ topic, onBack }) {
+export default function Quiz({ topic, onBack, onComplete }) {
   const total = topic.questions.length;
-
-  // === STATE MANAGEMENT ===
   const [idx, setIdx] = useState(-1);
   const [selected, setSelected] = useState(null);
   const [locked, setLocked] = useState(false);
@@ -39,6 +37,7 @@ export default function Quiz({ topic, onBack }) {
       setIdx(idx + 1);
     } else {
       setFinished(true);
+      if (onComplete) onComplete(score); // 👈 notify parent with final score
     }
   }
 
@@ -110,7 +109,6 @@ export default function Quiz({ topic, onBack }) {
           <span className="text-emerald-400 font-bold">{score}</span> / {total}
         </div>
       </div>
-
       {/* Question Card */}
       <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-8 max-w-3xl mx-auto">
         <div className="mb-3 text-sm text-slate-400">
@@ -119,14 +117,12 @@ export default function Quiz({ topic, onBack }) {
         <div className="text-2xl font-semibold mb-8 text-slate-100">
           {curQ.question}
         </div>
-
         {/* Options */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {curQ.options.map((opt, i) => {
             let base =
               "px-5 py-4 rounded-xl border text-left font-medium cursor-pointer select-none transition transform hover:scale-[1.02] ";
             let classes = base;
-
             if (locked) {
               if (i === curQ.correct) {
                 classes +=
@@ -141,7 +137,6 @@ export default function Quiz({ topic, onBack }) {
               classes +=
                 "border-slate-500/40 text-slate-200 hover:border-cyan-400 hover:bg-white/10";
             }
-
             return (
               <button
                 key={i}
@@ -155,7 +150,6 @@ export default function Quiz({ topic, onBack }) {
           })}
         </div>
       </div>
-
       {/* Next Button */}
       {locked && (
         <div className="text-center mt-8">
