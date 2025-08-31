@@ -80,7 +80,8 @@ export default function TopicPage({ topic, onHome }) {
           className="mt-10"
         >
           <Quiz
-            questions={topic.questions}
+            topic={topic} 
+            onBack={onHome}
             onComplete={handleComplete}
             onProgressUpdate={(qIdx) => setProgress(qIdx)}
           />
