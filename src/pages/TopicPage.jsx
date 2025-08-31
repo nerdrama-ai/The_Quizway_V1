@@ -20,16 +20,24 @@ export default function TopicPage({ topic, onHome }) {
     setShowBox(true)
   }
 
-  function handleComplete() {
+  function handleComplete(score) {
     setCompleted(true)
-    setProgress(total)
+    setProgress(score ?? total) // If score is provided, use it; else fallback to total
+  }
+
+  function handleProgressUpdate(qIdx) {
+    setProgress(qIdx)
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-8">
       {/* Header */}
       <div className="mb-6 flex justify-between items-center">
-        <Scorecard title={topic.title} progress={progress} total={total} />
+        <Scorecard
+          title={topic.title}
+          progress={progress}
+          total={total}
+        />
         <div>
           <button
             onClick={onHome}
@@ -39,7 +47,6 @@ export default function TopicPage({ topic, onHome }) {
           </button>
         </div>
       </div>
-
       {/* Topic intro */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -50,7 +57,6 @@ export default function TopicPage({ topic, onHome }) {
           {topic.title}
         </h1>
         <p className="text-slate-300 mb-6">{topic.description}</p>
-
         {!started && (
           <button
             onClick={handleStart}
@@ -59,7 +65,6 @@ export default function TopicPage({ topic, onHome }) {
             Start Quiz 🚀
           </button>
         )}
-
         {completed && (
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -70,23 +75,23 @@ export default function TopicPage({ topic, onHome }) {
           </motion.div>
         )}
       </motion.div>
-
       {/* Quiz container */}
-      {showBox && !completed && (
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mt-10"
-        >
-          <Quiz
-            topic={topic} 
-            onBack={onHome}
-            onComplete={handleComplete}
-            onProgressUpdate={(qIdx) => setProgress(qIdx)}
-          />
-        </motion.div>
-      )}
+      <div className="mt-10">
+        {showBox && !completed && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Quiz
+              topic={topic}
+              onBack={onHome}
+              onComplete={handleComplete}
+              onProgressUpdate={handleProgressUpdate}
+            />
+          </motion.div>
+        )}
+      </div>
     </div>
   )
 }
