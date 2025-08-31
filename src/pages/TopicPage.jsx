@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Scorecard from "../components/Scorecard"
-import QuizContainer from "../components/QuizContainer"
+import Quiz from "../components/Quiz"
 
 export default function TopicPage({ topic, onHome }) {
   const total = topic.questions.length
@@ -79,7 +79,7 @@ export default function TopicPage({ topic, onHome }) {
           transition={{ delay: 0.3 }}
           className="mt-10"
         >
-          <QuizContainer
+          <Quiz
             questions={topic.questions}
             onComplete={handleComplete}
             onProgressUpdate={(qIdx) => setProgress(qIdx)}
