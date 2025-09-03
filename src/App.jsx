@@ -30,7 +30,12 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white">
       {/* Header */}
-      <Header title="⚡ The Quizway" onHome={goHome} />
+      <Header
+        title="⚡ The Quizway"
+        onHome={goHome}
+        onAdmin={goAdmin}
+        currentPage={route.name}
+      />
 
       {/* Page transitions */}
       <main className="flex-1">
