@@ -1,27 +1,43 @@
 // FILE: src/pages/Home.jsx
-import React from "react"
+import React, { useState } from "react"
 import { motion } from "framer-motion"
 
-export default function Home({ topics, onOpen, onAdmin }) {
+export default function Home({ topics, onOpen }) {
+  const [query, setQuery] = useState("")
+
+  // Filter topics based on search query
+  const filteredTopics = topics.filter(
+    (t) =>
+      t.title.toLowerCase().includes(query.toLowerCase()) ||
+      t.description.toLowerCase().includes(query.toLowerCase())
+  )
+
   return (
     <main className="p-8 min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">
-          🚀 Explore Topics
-        </h2>
+      {/* Logo Header */}
+      <div className="flex flex-col items-center mb-8">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">
+          The Quizway
+        </h1>
+        <p className="text-slate-300 mt-2 text-sm md:text-base">
+          Sharpen your mind, one quiz at a time
+        </p>
+      </div>
 
-        <button
-          onClick={onAdmin}
-          className="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-red-400 text-white font-semibold shadow-md hover:opacity-90 transition"
-        >
-          Admin
-        </button>
+      {/* Search Bar */}
+      <div className="flex justify-center mb-10">
+        <input
+          type="text"
+          placeholder="🔍 Search topics..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full md:w-2/3 xl:w-1/2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        />
       </div>
 
       {/* Topics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {topics.map((t, idx) => (
+        {filteredTopics.map((t, idx) => (
           <motion.article
             key={t.id}
             initial={{ opacity: 0, y: 40 }}
