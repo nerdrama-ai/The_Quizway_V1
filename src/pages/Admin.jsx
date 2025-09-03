@@ -75,7 +75,7 @@ export default function Admin({ onHome }) {
       id: Date.now().toString(),
       title: "Untitled Topic",
       description: "",
-      timer: 0, // seconds
+      timer: 0,
       keywords: [],
       questions: [],
     }
@@ -120,7 +120,7 @@ export default function Admin({ onHome }) {
       <div className="flex items-center justify-center min-h-screen bg-slate-100 dark:bg-slate-900">
         <form
           onSubmit={handleLogin}
-          className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md w-80"
+          className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md w-80 text-slate-900 dark:text-slate-100"
         >
           <h2 className="text-xl font-bold mb-4 text-center">Admin Login</h2>
           {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
@@ -129,16 +129,16 @@ export default function Admin({ onHome }) {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Username"
-            className="border p-2 w-full mb-2 rounded"
+            className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-2 w-full mb-2 rounded"
           />
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="border p-2 w-full mb-4 rounded"
+            className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-2 w-full mb-4 rounded"
           />
-          <button className="w-full bg-indigo-600 text-white py-2 rounded">
+          <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded">
             Login
           </button>
         </form>
@@ -148,14 +148,20 @@ export default function Admin({ onHome }) {
 
   /** ---------- ADMIN PANEL ---------- **/
   return (
-    <div className="min-h-screen p-6 bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen p-6 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
       <header className="flex justify-between mb-6">
         <h2 className="text-2xl font-bold">Admin Panel</h2>
         <div className="flex gap-2">
-          <button onClick={onHome} className="px-3 py-1 bg-slate-200 rounded">
+          <button
+            onClick={onHome}
+            className="px-3 py-1 bg-slate-200 dark:bg-slate-700 rounded"
+          >
             Home
           </button>
-          <button onClick={handleLogout} className="px-3 py-1 bg-red-500 text-white rounded">
+          <button
+            onClick={handleLogout}
+            className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded"
+          >
             Logout
           </button>
         </div>
@@ -170,11 +176,11 @@ export default function Admin({ onHome }) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search topics..."
-              className="flex-1 border p-2 rounded"
+              className="flex-1 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-2 rounded"
             />
             <button
               onClick={handleAddTopic}
-              className="bg-indigo-600 text-white px-3 rounded"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 rounded"
             >
               +
             </button>
@@ -188,12 +194,16 @@ export default function Admin({ onHome }) {
                   key={t.id}
                   onClick={() => setActiveTopicId(t.id)}
                   className={`p-2 border rounded cursor-pointer ${
-                    activeTopicId === t.id ? "bg-indigo-100" : "hover:bg-slate-100"
+                    activeTopicId === t.id
+                      ? "bg-indigo-100 dark:bg-indigo-700"
+                      : "hover:bg-slate-100 dark:hover:bg-slate-700"
                   }`}
                 >
                   <div className="font-semibold">{t.title}</div>
                   {t.description && (
-                    <div className="text-xs text-slate-500">{t.description}</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400">
+                      {t.description}
+                    </div>
                   )}
                 </div>
               ))}
@@ -208,13 +218,15 @@ export default function Admin({ onHome }) {
               <section className="p-4 bg-white dark:bg-slate-800 rounded shadow">
                 <h3 className="font-bold mb-2">Topic Info</h3>
                 <input
-                  className="border p-2 w-full mb-2 rounded"
+                  className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-2 w-full mb-2 rounded"
                   value={activeTopic.title}
-                  onChange={(e) => handleUpdateTopic(activeTopic.id, "title", e.target.value)}
+                  onChange={(e) =>
+                    handleUpdateTopic(activeTopic.id, "title", e.target.value)
+                  }
                   placeholder="Title"
                 />
                 <textarea
-                  className="border p-2 w-full mb-2 rounded"
+                  className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-2 w-full mb-2 rounded"
                   value={activeTopic.description}
                   onChange={(e) =>
                     handleUpdateTopic(activeTopic.id, "description", e.target.value)
@@ -223,7 +235,7 @@ export default function Admin({ onHome }) {
                 />
                 <input
                   type="number"
-                  className="border p-2 w-full mb-2 rounded"
+                  className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-2 w-full mb-2 rounded"
                   value={activeTopic.timer}
                   onChange={(e) =>
                     handleUpdateTopic(activeTopic.id, "timer", Number(e.target.value))
@@ -231,7 +243,7 @@ export default function Admin({ onHome }) {
                   placeholder="Timer (seconds, 0 = no limit)"
                 />
                 <input
-                  className="border p-2 w-full mb-2 rounded"
+                  className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-2 w-full mb-2 rounded"
                   value={activeTopic.keywords?.join(", ")}
                   onChange={(e) =>
                     handleUpdateTopic(
@@ -250,21 +262,26 @@ export default function Admin({ onHome }) {
                   <h3 className="font-bold">Questions</h3>
                   <button
                     onClick={() => handleAddQuestion(activeTopic.id)}
-                    className="bg-indigo-600 text-white px-3 py-1 rounded"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded"
                   >
                     + Add Question
                   </button>
                 </div>
 
                 {activeTopic.questions.length === 0 && (
-                  <p className="text-sm text-slate-500">No questions yet</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    No questions yet
+                  </p>
                 )}
 
                 {activeTopic.questions.map((q, qi) => (
-                  <div key={q.id} className="p-3 border rounded mb-3">
+                  <div
+                    key={q.id}
+                    className="p-3 border border-slate-300 dark:border-slate-600 rounded mb-3"
+                  >
                     <p className="font-medium mb-2">Q{qi + 1}</p>
                     <input
-                      className="border p-1 w-full mb-2 rounded"
+                      className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-1 w-full mb-2 rounded"
                       value={q.question}
                       onChange={(e) =>
                         handleUpdateQuestion(activeTopic.id, q.id, (oldQ) => ({
@@ -277,7 +294,7 @@ export default function Admin({ onHome }) {
                     {q.options.map((opt, oi) => (
                       <input
                         key={oi}
-                        className="border p-1 w-full mb-1 rounded"
+                        className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-1 w-full mb-1 rounded"
                         value={opt}
                         onChange={(e) =>
                           handleUpdateQuestion(activeTopic.id, q.id, (oldQ) => ({
@@ -291,7 +308,7 @@ export default function Admin({ onHome }) {
                       />
                     ))}
                     <input
-                      className="border p-1 w-full mb-1 rounded"
+                      className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-1 w-full mb-1 rounded"
                       value={q.hint}
                       onChange={(e) =>
                         handleUpdateQuestion(activeTopic.id, q.id, (oldQ) => ({
@@ -302,7 +319,7 @@ export default function Admin({ onHome }) {
                       placeholder="Hint"
                     />
                     <input
-                      className="border p-1 w-full mb-1 rounded"
+                      className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-1 w-full mb-1 rounded"
                       value={q.explanation}
                       onChange={(e) =>
                         handleUpdateQuestion(activeTopic.id, q.id, (oldQ) => ({
@@ -325,7 +342,7 @@ export default function Admin({ onHome }) {
                             correct: Number(e.target.value) - 1,
                           }))
                         }
-                        className="border p-1 w-16 ml-2 rounded"
+                        className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 p-1 w-16 ml-2 rounded"
                       />
                     </label>
                   </div>
@@ -333,7 +350,9 @@ export default function Admin({ onHome }) {
               </section>
             </>
           ) : (
-            <p className="italic text-slate-500">Select a topic to edit</p>
+            <p className="italic text-slate-500 dark:text-slate-400">
+              Select a topic to edit
+            </p>
           )}
         </main>
       </div>
