@@ -55,6 +55,7 @@ export default function Admin({ onHome }) {
 
   const [search, setSearch] = useState("")
   const [toasts, setToasts] = useState([])
+  const [loadingQuiz, setLoadingQuiz] = useState(false)
 
   const addToast = (message, type = "info") => {
     const id = Date.now().toString()
@@ -121,6 +122,41 @@ export default function Admin({ onHome }) {
         : { ...t, questions: t.questions.map((q) => (q.id === qid ? updater(q) : q)) }
     )
     saveAndSetTopics(updated)
+  }
+
+  /** ---------- NEW: Generate Quiz From PDF ---------- **/
+  const handleUploadPdf = async (file) => {
+    if (!file || !activeTopic) return
+    setLoadingQuiz(true)
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+
+      // Send to backend endpoint
+      const res = await fetch("/api/upload-pdf", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!res.ok) throw new Error("Failed to process PDF")
+
+      const data = await res.json()
+
+      if (!data.questions) throw new Error("No questions returned")
+
+      const updated = topics.map((t) =>
+        t.id === activeTopic.id
+          ? { ...t, questions: [...t.questions, ...data.questions] }
+          : t
+      )
+      saveAndSetTopics(updated)
+      addToast("Quiz generated from PDF", "success")
+    } catch (err) {
+      console.error(err)
+      addToast("Error generating quiz", "warning")
+    } finally {
+      setLoadingQuiz(false)
+    }
   }
 
   /** ---------- LOGIN SCREEN ---------- **/
@@ -270,6 +306,20 @@ export default function Admin({ onHome }) {
                   }
                   placeholder="Keywords (comma separated)"
                 />
+
+                {/* PDF Upload */}
+                <div className="mt-4">
+                  <h4 className="font-semibold mb-2">Generate Quiz from PDF</h4>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(e) => handleUploadPdf(e.target.files[0])}
+                    className="block mb-2"
+                  />
+                  {loadingQuiz && (
+                    <p className="text-sm text-indigo-600">Generating quiz...</p>
+                  )}
+                </div>
               </section>
 
               {/* Questions */}
